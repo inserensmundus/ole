@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>个人九宫格 | 创意视界</title>
+    <!-- 引入 Google Fonts 提升字体质感 -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <!-- Font Awesome 6 (免费图标库) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(145deg, #f5f7fc 0%, #eef2f6 100%);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        /* 主容器 - 优雅卡片风格 */
+        .portfolio-container {
+            max-width: 1200px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(2px);
+            border-radius: 3.5rem;
+            box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.2), 0 2px 8px rgba(0, 0, 0, 0.02);
+            padding: 2rem 1.8rem 2.5rem 1.8rem;
+            transition: all 0.2s ease;
+        }
+
+        /* 页眉区域 */
+        .hero {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        .hero h1 {
+            font-size: 2.6rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #1f2b3c, #2a3f5e);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            letter-spacing: -0.01em;
+            margin-bottom: 0.5rem;
+        }
+        .hero .sub {
+            font-size: 1rem;
+            color: #5b6e8c;
+            font-weight: 400;
+            border-top: 1px solid #dce5ef;
+            display: inline-block;
+            padding-top: 0.6rem;
+            margin-top: 0.4rem;
+        }
+
+        /* 九宫格核心布局 - CSS Grid 完美响应式 */
+        .grid-9 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.8rem;
+        }
+
+        /* 卡片样式 - 玻璃质感现代风格 */
+        .grid-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(4px);
+            border-radius: 2rem;
+            padding: 1.8rem 1rem 1.8rem 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            box-shadow: 0 10px 20px -8px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* 悬浮动效 */
+        .grid-card:hover {
+            transform: translateY(-8px);
+            background: #ffffff;
+            box-shadow: 0 25px 35px -12px rgba(0, 0, 0, 0.2);
+            border-color: rgba(120, 150, 200, 0.3);
+        }
+
+        /* 图标区域 */
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #2c4c7c;
+            transition: transform 0.2s ease, color 0.2s;
+        }
+        .grid-card:hover .card-icon {
+            transform: scale(1.05);
+            color: #1e3a5f;
+        }
+
+        /* 标题 */
+        .card-title {
+            font-weight: 700;
+            font-size: 1.35rem;
+            margin-bottom: 0.6rem;
+            color: #1f2e45;
+            letter-spacing: -0.2px;
+        }
+
+        /* 描述文字 */
+        .card-desc {
+            font-size: 0.85rem;
+            color: #5f738c;
+            line-height: 1.4;
+            max-width: 180px;
+            margin: 0 auto;
+        }
+
+        /* 个性化点缀: 给每个格子底部微标记 (可选) */
+        .badge-tag {
+            display: inline-block;
+            margin-top: 0.8rem;
+            font-size: 0.7rem;
+            background: #eef3fc;
+            padding: 0.2rem 0.7rem;
+            border-radius: 20px;
+            color: #2c5a7a;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+        .grid-card:hover .badge-tag {
+            background: #e0eaff;
+        }
+
+        /* 页脚 社交/版权 */
+        .footer-note {
+            text-align: center;
+            margin-top: 3.2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.06);
+            font-size: 0.85rem;
+            color: #6c7f9c;
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+        .footer-note a {
+            text-decoration: none;
+            color: #2c5f8a;
+            font-weight: 500;
+            transition: color 0.2s;
+            margin: 0 0.2rem;
+        }
+        .footer-note a:hover {
+            color: #0e3a5a;
+            text-decoration: underline;
+        }
+        .heart {
+            color: #cb6e6e;
+        }
+
+        /* 响应式: 平板变成两列? 但九宫格概念要保持整洁，在窄屏幕上改为两列再变一列 */
+        @media (max-width: 850px) {
+            .grid-9 {
+                gap: 1.2rem;
+            }
+            .card-title {
+                font-size: 1.2rem;
+            }
+            .card-icon {
+                font-size: 2.5rem;
+            }
+            .portfolio-container {
+                padding: 1.5rem;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .grid-9 {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+            .hero h1 {
+                font-size: 2rem;
+            }
+            .card-desc {
+                font-size: 0.75rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .grid-9 {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            .grid-card {
+                padding: 1.2rem;
+                flex-direction: row;
+                justify-content: flex-start;
+                text-align: left;
+                gap: 1rem;
+            }
+            .card-icon {
+                margin-bottom: 0;
+                font-size: 2.2rem;
+                min-width: 55px;
+            }
+            .card-text-area {
+                text-align: left;
+            }
+            .card-desc {
+                margin: 0;
+                max-width: 100%;
+            }
+            .badge-tag {
+                margin-top: 0.4rem;
+                display: inline-block;
+            }
+        }
+
+        /* 对于小屏flex微调内部结构，方便阅读 */
+        @media (max-width: 480px) {
+            .grid-card {
+                display: flex;
+                align-items: center;
+            }
+            .card-text-area {
+                flex: 1;
+            }
+        }
+
+        /* 增加点击波纹感 (轻微) */
+        .grid-card:active {
+            transform: scale(0.98);
+            transition-duration: 0.05s;
+        }
+    </style>
+</head>
+<body>
+
+<div class="portfolio-container">
+    <div class="hero">
+        <h1>✦ 灵感九宫格 ✦</h1>
+        <div class="sub">探索 · 创造 · 分享 —— 属于我的多维空间</div>
+    </div>
+
+    <!-- 九宫格核心区域 -->
+    <div class="grid-9">
+        <!-- 卡片 1 - 关于我 -->
+        <div class="grid-card" data-url="#about" data-modal="about">
+            <div class="card-icon"><i class="fas fa-user-astronaut"></i></div>
+            <div class="card-text-area">
+                <div class="card-title">关于我</div>
+                <div class="card-desc">独立创作者 / 设计思维 / 旅行者</div>
+                <span class="badge-tag">ME</span>
+            </div>
+        </div>
+
+        <!-- 卡片 2 - 作品集 -->
+        <div class="grid-card" data-url="#portfolio" data-modal="portfolio">
+            <div class="card-icon"><i class="fas fa-palette"></i></div>
+            <div class="card-text-area">
+                <div class="card-title">作品集</div>
+                <div class="card-desc">UI/UX · 插画 · 摄影项目</div>
+                <span class="badge-tag">12+ 作品</span>
+            </div>
+        </div>
+
+        <!-- 卡片 3 - 博客随笔 -->
+        <div class="grid-card" data-url="#blog" data-modal="blog">
+            <div class="card-icon"><i class="fas fa-feather-alt"></i></div>
+            <div class="card-text-area">
+                <div class="card-title">灵感博客</div>
+                <div class="card-desc">设计思考、旅行日记与生活美学</div>
+                <span class="badge-tag">最近更新</span>
+            </div>
+        </div>
+
+        <!-- 卡片 4 - 摄影展 -->
+        <div class="grid-card" data-url="#photography" data-modal="photography">
+            <div class="card-icon"><i class="fas fa-camera-retro"></i></div>
+            <div class="card-text-area">
+                <div class="card-title">光影日记</div>
+                <div class="card-desc">街头摄影 · 自然时刻</div>
+                <span class="badge-tag">瞬间永恒</span>
+            </div>
+        </div>
+
+        <!-- 卡片 5 - 技能树 -->
+        <div class="grid-card" data-url="#skills" data-modal="skills">
+            <div class="card-icon"><i class="fas fa-code-branch"></i></div>
+            <div class="card-text-area">
+                <div class="card-title">技能工坊</div>
+                <div class="card-desc">前端 · 交互 · AI 工具链</div>
+                <span class="badge-tag">持续进化</span>
+            </div>
+        </div>
+
+        <!-- 卡片 6 - 音乐电台 -->
+        <div class="grid-card" data-url="#music" data-modal="music">
+            <div class="card-icon"><i class="fas fa-headphones-alt"></i></div>
+            <div class="card-text-area">
+                <div class="card-title">音悦共鸣</div>
+                <div class="card-desc">歌单推荐 · 氛围创作歌单</div>
+                <span class="badge-tag">🎧 Lofi/古典</span>
+            </div>
+        </div>
+
+        <!-- 卡片 7 - 推荐阅读 -->
+        <div class="grid-card" data-url="#reading" data-modal="reading">
+            <div class="card-icon"><i class="fas fa-book-open"></i></div>
+            <div class="card-text-area">
+                <div class="card-title">书斋物语</div>
+                <div class="card-desc">近期读物 & 思想笔记</div>
+                <span class="badge-tag">深度阅读</span>
+            </div>
+        </div>
+
+        <!-- 卡片 8 - 联系 / 合作 -->
+        <div class="grid-card" data-url="#contact" data-modal="contact">
+            <div class="card-icon"><i class="fas fa-envelope-open-text"></i></div>
+            <div class="card-text-area">
+                <div class="card-title">合作邀约</div>
+                <div class="card-desc">项目洽谈 · 创意碰撞</div>
+                <span class="badge-tag">hello@me.com</span>
+            </div>
+        </div>
+
+        <!-- 卡片 9 - 未来预告 / 神秘箱 -->
+        <div class="grid-card" data-url="#future" data-modal="future">
+            <div class="card-icon"><i class="fas fa-crystal-ball"></i></div>
+            <div class="card-text-area">
+                <div class="card-title">即将启程</div>
+                <div class="card-desc">新企划 / 工作坊 / 数字艺术</div>
+                <span class="badge-tag">Coming Soon</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-note">
+        <span>© 2025 九宫格视界 · 灵感共振</span>
+        <span>
+            <i class="fab fa-instagram"></i> <a href="#">instagram</a> &nbsp;|&nbsp;
+            <i class="fab fa-github"></i> <a href="#">github</a> &nbsp;|&nbsp;
+            <i class="fab fa-twitter"></i> <a href="#">x</a>
+        </span>
+        <span>Made with <i class="fas fa-heart heart"></i> 简洁之美</span>
+    </div>
+</div>
+
+<!-- 自定义模态框 (轻提示，展示每个格子详细信息，不跳转，优雅弹出) -->
+<div id="customModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <span id="modalTitle">标题</span>
+            <button class="modal-close-btn">&times;</button>
+        </div>
+        <div class="modal-body" id="modalBody">
+            这里是详细信息内容区域...
+        </div>
+        <div class="modal-footer">
+            <button class="modal-action-btn" id="modalActionBtn">探索更多</button>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* 模态框样式 - 现代微光 */
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(15, 25, 40, 0.7);
+        backdrop-filter: blur(5px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 2000;
+        transition: opacity 0.2s ease;
+        opacity: 0;
+    }
+    .modal-overlay.active {
+        opacity: 1;
+    }
+    .modal-content {
+        background: #ffffff;
+        max-width: 480px;
+        width: 90%;
+        border-radius: 2rem;
+        box-shadow: 0 30px 45px -20px rgba(0,0,0,0.4);
+        overflow: hidden;
+        animation: modalFadeUp 0.25s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+        transform: translateY(0);
+        border: 1px solid rgba(210, 225, 245, 0.5);
+    }
+    @keyframes modalFadeUp {
+        from {
+            opacity: 0;
+            transform: translateY(25px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.2rem 1.5rem;
+        border-bottom: 1px solid #eff3f8;
+        background: #fafcff;
+    }
+    .modal-header span {
+        font-size: 1.5rem;
+        font-weight: 700;
+        background: linear-gradient(130deg, #1f3c5c, #2b4f74);
+        background-clip: text;
+        -webkit-background-clip: text;
+        color: transparent;
+    }
+    .modal-close-btn {
+        background: none;
+        border: none;
+        font-size: 1.8rem;
+        cursor: pointer;
+        line-height: 1;
+        color: #8c9bb0;
+        transition: color 0.2s;
+    }
+    .modal-close-btn:hover {
+        color: #1f3c5c;
+    }
+    .modal-body {
+        padding: 1.8rem 1.5rem;
+        color: #2d3f55;
+        font-size: 1rem;
+        line-height: 1.5;
+        background: white;
+    }
+    .modal-footer {
+        padding: 1rem 1.5rem 1.5rem 1.5rem;
+        background: #ffffff;
+        border-top: 1px solid #edf2f8;
+        display: flex;
+        justify-content: flex-end;
+    }
+    .modal-action-btn {
+        background: #1f3c5c;
+        border: none;
+        padding: 0.6rem 1.4rem;
+        border-radius: 2rem;
+        color: white;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s, transform 0.1s;
+        font-size: 0.9rem;
+        letter-spacing: 0.3px;
+    }
+    .modal-action-btn:hover {
+        background: #0f2c46;
+        transform: scale(0.97);
+    }
+    @media (max-width: 550px) {
+        .modal-body {
+            padding: 1.4rem;
+        }
+    }
+</style>
+
+<script>
+    // 九宫格数据详细内容映射 (增强互动体验)
+    const modalDataMap = {
+        about: {
+            title: "✨ 关于我",
+            body: "嗨，我是林一 (Lin Yi) —— 一名独立设计师 & 创意开发者。热衷于探索数字艺术与人文的交汇点。曾为多家创新公司提供视觉方案，目前在路上，记录世界美好。\n\n“设计不是为了更酷，而是为了更好的连接。” 期待与志同道合的你交流。",
+            actionLink: "#about-more"
+        },
+        portfolio: {
+            title: "🎨 作品集精选",
+            body: "包含品牌设计、网页交互与插画项目。代表作：《森语》系列VI、个人理财APP概念、动态海报实验。点击下方查看完整案例展示。",
+            actionLink: "#portfolio-gallery"
+        },
+        blog: {
+            title: "📝 灵感博客",
+            body: "最新文章：《AI时代的设计温度》、《京都旅行散记》、《极简主义读书法》。定期分享创作思考与审美碎片。",
+            actionLink: "#blog-articles"
+        },
+        photography: {
+            title: "📸 光影日记",
+            body: "镜头下的城市切片：上海弄堂、冰岛极光、日常静物。每张照片都是一个故事。浏览完整摄影图库。",
+            actionLink: "#photography-grid"
+        },
+        skills: {
+            title: "⚙️ 技能工坊",
+            body: "前端: React/Vue · 设计: Figma/PS/AI · 三维: Blender基础。同时热衷探索AIGC工作流。持续输出开源小工具。",
+            actionLink: "#skill-tree"
+        },
+        music: {
+            title: "🎵 音悦共鸣",
+            body: "我的私人歌单：氛围电子、爵士、古典吉他。不定期推荐适合创作&阅读的背景音。\n🎧 近期循环：FKJ《Ylang Ylang》, 坂本龙一精选。",
+            actionLink: "#music-playlist"
+        },
+        reading: {
+            title: "📖 书斋物语",
+            body: "本月在读：《有限与无限的游戏》、《设计中的设计》、《夜晚的潜水艇》。阅读是一座随身携带的避难所。",
+            actionLink: "#reading-list"
+        },
+        contact: {
+            title: "📮 合作邀约",
+            body: "欢迎项目合作、演讲邀请或单纯交个朋友。\n📧 Email: linyi@creativestudio.com\n📱 社交平台: @linyi_design",
+            actionLink: "#contact-form"
+        },
+        future: {
+            title: "🔮 即将启程",
+            body: "数字艺术工作坊· 2025 个人展览筹备中 · 独立杂志创刊号。保持好奇，敬请期待！加入邮件列表获得第一手消息。",
+            actionLink: "#future-event"
+        }
+    };
+
+    // 获取所有卡片
+    const cards = document.querySelectorAll('.grid-card');
+    const modalOverlay = document.getElementById('customModal');
+    const modalTitleSpan = document.getElementById('modalTitle');
+    const modalBodyDiv = document.getElementById('modalBody');
+    const modalCloseBtn = document.querySelector('.modal-close-btn');
+    const modalActionBtn = document.getElementById('modalActionBtn');
+
+    let currentModalKey = null;   // 存储当前打开的卡片类型
+
+    // 打开模态框函数
+    function openModal(modalKey) {
+        if (!modalDataMap[modalKey]) {
+            console.warn("未找到对应模态数据");
+            return;
+        }
+        const data = modalDataMap[modalKey];
+        modalTitleSpan.innerText = data.title;
+        // 支持纯文本换行处理
+        modalBodyDiv.innerHTML = data.body.replace(/\n/g, '<br>');
+        currentModalKey = modalKey;
+        modalOverlay.style.display = 'flex';
+        // 强制重绘触发动画
+        setTimeout(() => {
+            modalOverlay.classList.add('active');
+        }, 10);
+        document.body.style.overflow = 'hidden'; // 防止滚动穿透
+    }
+
+    function closeModal() {
+        modalOverlay.classList.remove('active');
+        setTimeout(() => {
+            modalOverlay.style.display = 'none';
+            document.body.style.overflow = '';
+        }, 200);
+        currentModalKey = null;
+    }
+
+    // 为每个卡片绑定点击事件，打开对应的模态窗 (代替直接跳转)
+    cards.forEach(card => {
+        card.addEventListener('click', (e) => {
+            // 阻止冒泡，避免意外
+            e.stopPropagation();
+            // 获取卡片对应的模态类型 (从data-modal属性中获取)
+            const modalType = card.getAttribute('data-modal');
+            if (modalType && modalDataMap[modalType]) {
+                openModal(modalType);
+            } else {
+                // 降级: 如果某些卡片没有匹配，显示一个友好的默认提示
+                modalTitleSpan.innerText = "✨ 探索更多";
+                modalBodyDiv.innerHTML = "正在构建精彩内容，稍后再来哦。保持好奇心，下一站更美好。";
+                currentModalKey = "default";
+                modalOverlay.style.display = 'flex';
+                setTimeout(() => {
+                    modalOverlay.classList.add('active');
+                }, 10);
+                document.body.style.overflow = 'hidden';
+            }
+        });
+    });
+
+    // 关闭模态框事件
+    modalCloseBtn.addEventListener('click', closeModal);
+    modalOverlay.addEventListener('click', (e) => {
+        if (e.target === modalOverlay) {
+            closeModal();
+        }
+    });
+
+    // 为模态框的“探索更多”按钮添加动态行为: 根据当前打开的卡片执行不同动作 (可以跳转模拟锚点或展示alert)
+    modalActionBtn.addEventListener('click', () => {
+        if (currentModalKey && modalDataMap[currentModalKey]) {
+            const actionLink = modalDataMap[currentModalKey].actionLink;
+            // 优雅提示: 由于是个人演示站，我们展示一个平滑的消息提醒，并关闭模态窗；如果想模拟跳转可alert
+            // 设计为更符合个人网站风格：弹出toast提示 "即将跳转至详情页"
+            showFloatingMessage(`即将探索: ${modalDataMap[currentModalKey].title} 相关内容`, actionLink);
+            closeModal();
+        } else {
+            // 默认处理
+            showFloatingMessage("更多精彩正在筹备中，保持关注~", "#");
+            closeModal();
+        }
+    });
+
+    // 创建悬浮临时提示（轻提示）
+    function showFloatingMessage(msg, linkHint = "#") {
+        const toast = document.createElement('div');
+        toast.innerText = msg;
+        toast.style.position = 'fixed';
+        toast.style.bottom = '25px';
+        toast.style.left = '50%';
+        toast.style.transform = 'translateX(-50%)';
+        toast.style.backgroundColor = '#1f2e45';
+        toast.style.color = '#f0f6ff';
+        toast.style.padding = '0.8rem 1.6rem';
+        toast.style.borderRadius = '60px';
+        toast.style.fontSize = '0.9rem';
+        toast.style.fontWeight = '500';
+        toast.style.zIndex = '2100';
+        toast.style.backdropFilter = 'blur(8px)';
+        toast.style.background = 'rgba(20, 35, 55, 0.9)';
+        toast.style.boxShadow = '0 8px 20px rgba(0,0,0,0.2)';
+        toast.style.border = '1px solid rgba(255,255,240,0.2)';
+        toast.style.fontFamily = "'Inter', sans-serif";
+        document.body.appendChild(toast);
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            toast.style.transition = 'opacity 0.3s';
+            setTimeout(() => {
+                if (toast.parentNode) toast.parentNode.removeChild(toast);
+            }, 300);
+        }, 2200);
+        // 控制台输出友好信息，演示实际场景可以改成location.hash = linkHint
+        if (linkHint && linkHint !== "#") {
+            console.log(`✨ 导航模拟: 用户希望查看 ${linkHint} 页面 (个人网站可在此做路由跳转)`);
+            // 实际完整版可替换为 window.location.hash = linkHint，但鉴于演示不做强制跳转，保持体验平滑。
+            // 但为了更加直观，我们可以设置一个轻柔的提示说明已经了解需求
+            setTimeout(() => {
+                // 显示一个小提醒已跳转风格(可忽略)
+                const secondHint = document.createElement('div');
+                secondHint.innerText = `↻ 探索 ${linkHint} 板块（演示模式）`;
+                secondHint.style.position = 'fixed';
+                secondHint.style.bottom = '85px';
+                secondHint.style.left = '50%';
+                secondHint.style.transform = 'translateX(-50%)';
+                secondHint.style.backgroundColor = '#3a5a7a';
+                secondHint.style.color = 'white';
+                secondHint.style.padding = '0.4rem 1rem';
+                secondHint.style.borderRadius = '40px';
+                secondHint.style.fontSize = '0.7rem';
+                secondHint.style.zIndex = '2100';
+                document.body.appendChild(secondHint);
+                setTimeout(() => secondHint.remove(), 1800);
+            }, 400);
+        }
+    }
+
+    // 预防页面加载时如果点击背景穿透
+    window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modalOverlay.style.display === 'flex') {
+            closeModal();
+        }
+    });
+
+    // 增加hover小点缀——初始化后增加一些平滑效果
+    console.log("九宫格个人网站已启动 | 创意视图");
+</script>
+</body>
+</html>
